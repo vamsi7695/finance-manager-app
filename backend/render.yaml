@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: finance-manager-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ENCRYPTION_SERVER_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: finance-db
+          property: connectionURI
+    healthCheckPath: /api/auth/health
+    plan: free
+
+databases:
+  - name: finance-db
+    plan: free
+    databaseName: financedb

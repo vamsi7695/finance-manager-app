@@ -1,0 +1,70 @@
+// Variables
+$primary: #667eea;
+$primary-dark: #5a6fd6;
+$gradient-start: #667eea;
+$gradient-end: #764ba2;
+$text-dark: #1f2937;
+$text-muted: #6b7280;
+$border: #e5e7eb;
+$bg-page: #f9fafb;
+$radius: 0.75rem;
+$shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+// Mixins
+@mixin card {
+  background: white;
+  border-radius: $radius;
+  box-shadow: $shadow;
+  padding: 1.5rem;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Login page
+.login-container {
+  @include flex-center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, $gradient-start 0%, $gradient-end 100%);
+
+  .login-card {
+    @include card;
+    box-shadow: $shadow-lg;
+    padding: 3rem;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+
+    h1 {
+      color: $text-dark;
+      margin-bottom: 0.5rem;
+      font-size: 1.875rem;
+      font-weight: 700;
+    }
+
+    p {
+      color: $text-muted;
+      margin-bottom: 2rem;
+    }
+  }
+}
+
+// Status badges
+.status, .card-type {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+
+  &.active { background: #d1fae5; color: #065f46; }
+  &.expired, &.closed { background: #f3f4f6; color: #6b7280; }
+  &.cancelled, &.defaulted { background: #fee2e2; color: #991b1b; }
+  &.credit { background: #fee2e2; color: #991b1b; }
+  &.debit { background: #d1fae5; color: #065f46; }
+}
