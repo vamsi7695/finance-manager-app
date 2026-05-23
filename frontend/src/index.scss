@@ -2,7 +2,12 @@
 
 /* Prevent iOS zoom on input focus (all iOS browsers) */
 @media screen and (max-width: 767px) {
-  input, select, textarea {
+  input:not([type="date"]), select, textarea {
     font-size: 16px !important;
+  }
+  /* Date inputs: keep compact on mobile */
+  input[type="date"] {
+    font-size: 14px !important;
+    min-height: 2.5rem;
   }
 }
