@@ -14,10 +14,26 @@ services:
         sync: false
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: finance-db
-          property: connectionURI
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: finance-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: finance-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: finance-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: finance-db
+          property: password
     healthCheckPath: /api/auth/health
     plan: free
 
