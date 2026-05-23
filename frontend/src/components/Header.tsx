@@ -107,7 +107,7 @@ export default function Header() {
                   </svg>
                 </button>
                 {showHomeDropdown && (
-                  <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-64 bg-white rounded-xl shadow-lg border border-gray-200/80 py-1.5 z-50 animate-in fade-in slide-in-from-top-1">
+                  <div className="fixed left-4 right-4 sm:absolute sm:left-auto sm:right-0 mt-2 sm:w-64 bg-white rounded-xl shadow-lg border border-gray-200/80 py-1.5 z-50 animate-in fade-in slide-in-from-top-1" style={{ top: dropdownRef.current ? dropdownRef.current.getBoundingClientRect().bottom + window.scrollY : undefined }}>
                     <div className="px-3 py-1.5">
                       <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Your Homes</p>
                     </div>
@@ -120,9 +120,9 @@ export default function Header() {
                         }`}
                       >
                         <span className="flex items-center gap-2">
-                          {currentHome?.id === membership.home.id && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-                          )}
+                          <svg className={`w-4 h-4 shrink-0 ${currentHome?.id === membership.home.id ? 'text-indigo-500' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                          </svg>
                           <span className={`truncate font-medium ${currentHome?.id === membership.home.id ? 'text-indigo-700' : 'text-gray-700'}`}>
                             {membership.home.name}
                           </span>

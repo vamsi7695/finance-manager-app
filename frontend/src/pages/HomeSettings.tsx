@@ -92,20 +92,18 @@ export default function HomeSettings() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
-      {/* Breadcrumb */}
-      <div className="mb-6">
+      {/* Header */}
+      <div className="flex items-center mb-6 gap-2">
         <Link
-          to={`/homes/${homeId}`}
+          to={`/dashboard`}
           className="inline-flex items-center gap-1 text-[13px] text-gray-500 hover:text-gray-700 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Back to Home
         </Link>
+        <h1 className="text-xl font-semibold text-gray-900 tracking-tight">Home Settings</h1>
       </div>
-
-      <h1 className="text-xl font-semibold text-gray-900 tracking-tight mb-6">Home Settings</h1>
 
       <div className="space-y-4">
         {/* Home Name */}

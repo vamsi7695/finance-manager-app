@@ -137,6 +137,16 @@ export default function Expenses() {
     }
   }, [homeId]);
 
+  // Lock body scroll when any modal is open
+  useEffect(() => {
+    if (showForm || showRecurringForm) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [showForm, showRecurringForm]);
+
   const handleRecurringSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -367,9 +377,9 @@ export default function Expenses() {
 
       {/* Add Expense Modal */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-10 pb-10 px-4">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-start justify-center sm:pt-10 sm:pb-10 sm:px-4">
           <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={handleCloseForm} />
-          <form onSubmit={handleSubmit} className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[calc(100vh-5rem)] overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-5">
+          <form onSubmit={handleSubmit} className="relative bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-lg max-h-[90vh] sm:max-h-[calc(100vh-5rem)] overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-5">
             <div className="flex items-center justify-between">
               <h2 className="text-[15px] font-semibold text-gray-900">{editingId ? 'Edit Expense' : 'Add Expense'}</h2>
               <button type="button" onClick={handleCloseForm} className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
@@ -997,11 +1007,11 @@ export default function Expenses() {
 
       {/* Recurring Expense Modal */}
       {showRecurringForm && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-10 pb-10 px-4">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-start justify-center sm:pt-10 sm:pb-10 sm:px-4">
           <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={resetRecurringForm} />
           <form
             onSubmit={handleRecurringSubmit}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[calc(100vh-5rem)] overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-5"
+            className="relative bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-lg max-h-[90vh] sm:max-h-[calc(100vh-5rem)] overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-5"
           >
             <div className="flex items-center justify-between">
               <h2 className="text-lg sm:text-xl font-bold text-gray-900">
