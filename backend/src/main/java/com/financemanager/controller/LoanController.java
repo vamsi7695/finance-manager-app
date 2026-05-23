@@ -3,29 +3,47 @@ package com.financemanager.controller;
 import com.financemanager.model.Loan;
 import com.financemanager.model.User;
 import com.financemanager.repository.LoanRepository;
+import com.financemanager.repository.HomeMembershipRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/loans")
 public class LoanController {
 
     private final LoanRepository loanRepository;
+    private final HomeMembershipRepository membershipRepository;
 
-    public LoanController(LoanRepository loanRepository) {
+    public LoanController(LoanRepository loanRepository, HomeMembershipRepository membershipRepository) {
         this.loanRepository = loanRepository;
+        this.membershipRepository = membershipRepository;
     }
 
     @GetMapping
-    public ResponseEntity<List<Loan>> getAll(@AuthenticationPrincipal User user) {
+    public ResponseEntity<?> getAll(@AuthenticationPrincipal User user,
+                                    @RequestHeader(value = "X-Home-Id", required = false) String homeId) {
+        if (homeId != null && !homeId.isBlank()) {
+            if (!membershipRepository.existsByUserIdAndHomeId(user.getId(), homeId)) {
+                return ResponseEntity.status(403).body(Map.of("error", "Not a member of this home"));
+            }
+            return ResponseEntity.ok(loanRepository.findByHomeId(homeId));
+        }
         return ResponseEntity.ok(loanRepository.findByUserId(user.getId()));
     }
 
     @PostMapping
-    public ResponseEntity<Loan> create(@AuthenticationPrincipal User user, @RequestBody Loan loan) {
+    public ResponseEntity<?> create(@AuthenticationPrincipal User user, @RequestBody Loan loan,
+                                    @RequestHeader(value = "X-Home-Id", required = false) String homeId) {
+        if (homeId != null && !homeId.isBlank()) {
+            if (!membershipRepository.existsByUserIdAndHomeId(user.getId(), homeId)) {
+                return ResponseEntity.status(403).body(Map.of("error", "Not a member of this home"));
+            }
+            loan.setHomeId(homeId);
+        }
         loan.setUser(user);
         return ResponseEntity.ok(loanRepository.save(loan));
     }

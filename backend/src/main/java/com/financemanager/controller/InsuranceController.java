@@ -3,29 +3,47 @@ package com.financemanager.controller;
 import com.financemanager.model.Insurance;
 import com.financemanager.model.User;
 import com.financemanager.repository.InsuranceRepository;
+import com.financemanager.repository.HomeMembershipRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/insurance")
 public class InsuranceController {
 
     private final InsuranceRepository insuranceRepository;
+    private final HomeMembershipRepository membershipRepository;
 
-    public InsuranceController(InsuranceRepository insuranceRepository) {
+    public InsuranceController(InsuranceRepository insuranceRepository, HomeMembershipRepository membershipRepository) {
         this.insuranceRepository = insuranceRepository;
+        this.membershipRepository = membershipRepository;
     }
 
     @GetMapping
-    public ResponseEntity<List<Insurance>> getAll(@AuthenticationPrincipal User user) {
+    public ResponseEntity<?> getAll(@AuthenticationPrincipal User user,
+                                    @RequestHeader(value = "X-Home-Id", required = false) String homeId) {
+        if (homeId != null && !homeId.isBlank()) {
+            if (!membershipRepository.existsByUserIdAndHomeId(user.getId(), homeId)) {
+                return ResponseEntity.status(403).body(Map.of("error", "Not a member of this home"));
+            }
+            return ResponseEntity.ok(insuranceRepository.findByHomeId(homeId));
+        }
         return ResponseEntity.ok(insuranceRepository.findByUserId(user.getId()));
     }
 
     @PostMapping
-    public ResponseEntity<Insurance> create(@AuthenticationPrincipal User user, @RequestBody Insurance insurance) {
+    public ResponseEntity<?> create(@AuthenticationPrincipal User user, @RequestBody Insurance insurance,
+                                    @RequestHeader(value = "X-Home-Id", required = false) String homeId) {
+        if (homeId != null && !homeId.isBlank()) {
+            if (!membershipRepository.existsByUserIdAndHomeId(user.getId(), homeId)) {
+                return ResponseEntity.status(403).body(Map.of("error", "Not a member of this home"));
+            }
+            insurance.setHomeId(homeId);
+        }
         insurance.setUser(user);
         return ResponseEntity.ok(insuranceRepository.save(insurance));
     }

@@ -43,6 +43,9 @@ public class Insurance {
     @Column(nullable = false)
     private PolicyStatus status;
 
+    @Column(name = "home_id")
+    private String homeId;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface InsuranceRepository extends JpaRepository<Insurance, String> {
     List<Insurance> findByUserId(String userId);
+    List<Insurance> findByHomeId(String homeId);
 }

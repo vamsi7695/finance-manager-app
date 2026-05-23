@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ExpenseRepository extends JpaRepository<Expense, String> {
     List<Expense> findByUserIdOrderByDateDesc(String userId);
+    List<Expense> findByHomeIdOrderByDateDesc(String homeId);
 }

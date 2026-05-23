@@ -24,12 +24,25 @@ public class Expense {
     @Column(nullable = false)
     private String category;
 
+    private String subCategory;
+
     private String description;
 
     @Column(nullable = false)
     private LocalDate date;
 
     private String paymentMethod;
+
+    private String tags;
+
+    private Boolean markAsTransfer;
+
+    private String rewardEligibility;
+
+    private String paidBy;
+
+    @Column(name = "home_id")
+    private String homeId;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

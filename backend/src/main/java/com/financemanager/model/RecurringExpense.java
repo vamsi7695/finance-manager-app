@@ -9,42 +9,51 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "loans")
+@Table(name = "recurring_expenses")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Loan {
+public class RecurringExpense {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Column(nullable = false)
-    private String lender;
+    private String label;
 
     @Column(nullable = false)
-    private String type; // home, personal, car, education
+    private BigDecimal amount;
 
     @Column(nullable = false)
-    private BigDecimal principalAmount;
+    private String frequency; // DAILY, WEEKLY, MONTHLY, YEARLY
 
-    @Column(nullable = false)
-    private BigDecimal interestRate;
-
-    @Column(nullable = false)
-    private BigDecimal emiAmount;
+    private Integer dayOfMonth;
 
     @Column(nullable = false)
     private LocalDate startDate;
 
-    @Column(nullable = false)
     private LocalDate endDate;
 
     @Column(nullable = false)
-    private BigDecimal outstandingBalance;
+    private String category;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private LoanStatus status;
+    private String subCategory;
+
+    private String paymentMethod;
+
+    private String paidBy;
+
+    private String description;
+
+    private String tags;
+
+    private Boolean markAsTransfer;
+
+    private String rewardEligibility;
+
+    private Boolean active;
+
+    private LocalDate lastGeneratedDate;
 
     @Column(name = "home_id")
     private String homeId;
@@ -53,8 +62,4 @@ public class Loan {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    public enum LoanStatus {
-        ACTIVE, CLOSED, DEFAULTED
-    }
 }

@@ -5,13 +5,54 @@ export interface User {
   picture: string;
 }
 
+export interface Home {
+  id: string;
+  name: string;
+  inviteCode: string;
+  currency?: string;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface HomeMembership {
+  id: string;
+  home: Home;
+  role: 'OWNER' | 'MEMBER';
+  joinedAt: string;
+}
+
 export interface Expense {
   id: string;
   amount: number;
   category: string;
+  subCategory?: string;
   description: string;
   date: string;
   paymentMethod: string;
+  tags?: string;
+  markAsTransfer?: boolean;
+  rewardEligibility?: string;
+  paidBy?: string;
+}
+
+export interface RecurringExpense {
+  id: string;
+  label: string;
+  amount: number;
+  frequency: string;
+  dayOfMonth?: number;
+  startDate: string;
+  endDate?: string;
+  category: string;
+  subCategory?: string;
+  paymentMethod?: string;
+  paidBy?: string;
+  description?: string;
+  tags?: string;
+  markAsTransfer?: boolean;
+  rewardEligibility?: string;
+  active?: boolean;
+  lastGeneratedDate?: string;
 }
 
 export interface Card {

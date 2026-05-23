@@ -38,6 +38,9 @@ public class Card {
     @Column(nullable = false)
     private boolean encrypted = false;
 
+    @Column(name = "home_id")
+    private String homeId;
+
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Perk> perks;
 

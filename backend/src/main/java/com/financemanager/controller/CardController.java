@@ -3,6 +3,7 @@ package com.financemanager.controller;
 import com.financemanager.model.Card;
 import com.financemanager.model.User;
 import com.financemanager.repository.CardRepository;
+import com.financemanager.repository.HomeMembershipRepository;
 import com.financemanager.service.EncryptionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,16 +18,28 @@ public class CardController {
 
     private final CardRepository cardRepository;
     private final EncryptionService encryptionService;
+    private final HomeMembershipRepository membershipRepository;
 
-    public CardController(CardRepository cardRepository, EncryptionService encryptionService) {
+    public CardController(CardRepository cardRepository, EncryptionService encryptionService,
+                          HomeMembershipRepository membershipRepository) {
         this.cardRepository = cardRepository;
         this.encryptionService = encryptionService;
+        this.membershipRepository = membershipRepository;
     }
 
     @GetMapping
-    public ResponseEntity<List<Card>> getAll(@AuthenticationPrincipal User user,
-                                             @RequestHeader(value = "X-Encryption-Key", required = false) String encryptionKey) {
-        List<Card> cards = cardRepository.findByUserId(user.getId());
+    public ResponseEntity<?> getAll(@AuthenticationPrincipal User user,
+                                    @RequestHeader(value = "X-Encryption-Key", required = false) String encryptionKey,
+                                    @RequestHeader(value = "X-Home-Id", required = false) String homeId) {
+        List<Card> cards;
+        if (homeId != null && !homeId.isBlank()) {
+            if (!membershipRepository.existsByUserIdAndHomeId(user.getId(), homeId)) {
+                return ResponseEntity.status(403).body(Map.of("error", "Not a member of this home"));
+            }
+            cards = cardRepository.findByHomeId(homeId);
+        } else {
+            cards = cardRepository.findByUserId(user.getId());
+        }
 
         String key = resolveEncryptionKey(user, encryptionKey);
         if (key != null) {
@@ -39,7 +52,8 @@ public class CardController {
     @PostMapping
     public ResponseEntity<?> create(@AuthenticationPrincipal User user,
                                     @RequestBody Card card,
-                                    @RequestHeader(value = "X-Encryption-Key", required = false) String encryptionKey) {
+                                    @RequestHeader(value = "X-Encryption-Key", required = false) String encryptionKey,
+                                    @RequestHeader(value = "X-Home-Id", required = false) String homeId) {
         if (user.getEncryptionMethod() == null || user.getEncryptionMethod() == User.EncryptionMethod.NONE) {
             return ResponseEntity.badRequest().body(Map.of("error", "Please setup wallet security first"));
         }
@@ -47,6 +61,13 @@ public class CardController {
         String key = resolveEncryptionKey(user, encryptionKey);
         if (key == null) {
             return ResponseEntity.status(403).body(Map.of("error", "Encryption key required. Please unlock your wallet."));
+        }
+
+        if (homeId != null && !homeId.isBlank()) {
+            if (!membershipRepository.existsByUserIdAndHomeId(user.getId(), homeId)) {
+                return ResponseEntity.status(403).body(Map.of("error", "Not a member of this home"));
+            }
+            card.setHomeId(homeId);
         }
 
         String lastFour = card.getCardNumber().length() >= 4

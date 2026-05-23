@@ -9,11 +9,16 @@ const api = axios.create({
   },
 });
 
-// Attach JWT token to every request
+// Attach JWT token and home context to every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  }
+  // Extract homeId from current URL path (e.g., /homes/:homeId/...)
+  const match = window.location.pathname.match(/\/homes\/([^/]+)/);
+  if (match) {
+    config.headers['X-Home-Id'] = match[1];
   }
   return config;
 });
