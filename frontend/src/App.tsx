@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from './context/AuthContext';
@@ -16,8 +17,17 @@ import Settings from './pages/Settings';
 import './App.scss';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+
+// Ping backend on app load to wake Render free tier from cold start
+function useWakeBackend() {
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/auth/health`).catch(() => {});
+  }, []);
+}
 
 function App() {
+  useWakeBackend();
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <AuthProvider>
