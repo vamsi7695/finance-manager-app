@@ -42,6 +42,11 @@ public class Loan {
     @Column(nullable = false)
     private BigDecimal outstandingBalance;
 
+    private Integer tenureMonths;
+
+    @Column(columnDefinition = "TEXT")
+    private String prepayments; // JSON array of prepayment adjustments
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LoanStatus status;

@@ -62,6 +62,8 @@ public class LoanController {
                     existing.setStartDate(loan.getStartDate());
                     existing.setEndDate(loan.getEndDate());
                     existing.setOutstandingBalance(loan.getOutstandingBalance());
+                    existing.setTenureMonths(loan.getTenureMonths());
+                    existing.setPrepayments(loan.getPrepayments());
                     existing.setStatus(loan.getStatus());
                     return ResponseEntity.ok(loanRepository.save(existing));
                 })

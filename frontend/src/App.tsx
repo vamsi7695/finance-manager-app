@@ -11,6 +11,8 @@ import Expenses from './pages/Expenses';
 import Cards from './pages/Cards';
 import InsurancePage from './pages/Insurance';
 import Loans from './pages/Loans';
+import LoanDetail from './pages/LoanDetail';
+import InterestOnlyLoanDetail from './pages/InterestOnlyLoanDetail';
 import HomeDashboard from './pages/HomeDashboard';
 import HomeSettings from './pages/HomeSettings';
 import Settings from './pages/Settings';
@@ -41,6 +43,8 @@ function App() {
                 <Route path="insurance" element={<InsurancePage />} />
                 <Route path="loans" element={<Loans />} />
               </Route>
+              <Route path="/homes/:homeId/loans/io/:loanId" element={<ProtectedRoute><Layout><InterestOnlyLoanDetail /></Layout></ProtectedRoute>} />
+              <Route path="/homes/:homeId/loans/:loanId" element={<ProtectedRoute><Layout><LoanDetail /></Layout></ProtectedRoute>} />
               <Route path="/homes/:homeId/settings" element={<ProtectedRoute><Layout><HomeSettings /></Layout></ProtectedRoute>} />
               <Route path="/homes/:homeId/guest/:code" element={<ProtectedRoute><Layout><HomeDashboard /></Layout></ProtectedRoute>} />
               <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />

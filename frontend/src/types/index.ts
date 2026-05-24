@@ -90,12 +90,33 @@ export interface Insurance {
 export interface Loan {
   id: string;
   lender: string;
-  type: string; // home, personal, car, education
+  type: string;
   principalAmount: number;
   interestRate: number;
   emiAmount: number;
   startDate: string;
   endDate: string;
   outstandingBalance: number;
+  tenureMonths?: number;
+  prepayments?: string; // JSON array
   status: 'ACTIVE' | 'CLOSED' | 'DEFAULTED';
+}
+
+export interface Prepayment {
+  id: string;
+  month: number; // month number from start (1-based)
+  amount: number;
+  type: 'reduce-tenure' | 'reduce-emi';
+  kind?: 'part-payment' | 'rate-change'; // default: part-payment
+  newRate?: number; // for rate-change
+  day?: number; // day of month (optional)
+  frequency?: 'one-time' | 'monthly' | 'quarterly' | 'yearly'; // default: one-time
+}
+
+export interface LoanTransaction {
+  id: string;
+  date: string;
+  amount: number;
+  type: 'interest' | 'principal' | 'rate_change';
+  note?: string;
 }

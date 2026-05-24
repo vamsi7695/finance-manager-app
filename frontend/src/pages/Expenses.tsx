@@ -359,7 +359,7 @@ export default function Expenses() {
       <div className="flex items-start justify-between gap-3 mb-6">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <Link to={`/homes/${homeId}`} className="text-gray-400 hover:text-gray-600 transition-colors" title="Back to Home">
+            <Link to={`/dashboard`} className="text-gray-400 hover:text-gray-600 transition-colors" title="Back to Home">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
             </Link>
             <h1 className="text-lg sm:text-xl font-semibold text-gray-900 tracking-tight">Expenses</h1>
@@ -1123,7 +1123,7 @@ export default function Expenses() {
                     }`}
                   >
                     <span>{c.emoji}</span>
-                    <span className="hidden sm:inline">{c.label}</span>
+                    <span>{c.label}</span>
                   </button>
                 ))}
               </div>
