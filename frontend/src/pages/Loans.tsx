@@ -89,7 +89,7 @@ export default function Loans() {
   const { homeId } = useParams<{ homeId: string }>();
   const navigate = useNavigate();
   const { currencySymbol } = useHome();
-  const { user } = useAuth();
+  useAuth();
 
   const [loans, setLoans] = useState<Loan[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -98,7 +98,7 @@ export default function Loans() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [activeType, setActiveType] = useState('All');
   const [search, setSearch] = useState('');
-  const [members, setMembers] = useState<{ id: string; name: string; picture?: string }[]>([]);
+  const [, setMembers] = useState<{ id: string; name: string; picture?: string }[]>([]);
   const [form, setForm] = useState({
     lender: '',
     type: 'Home',
@@ -160,23 +160,6 @@ export default function Loans() {
     } catch (err) {
       console.error('Loan save failed:', err);
     }
-  };
-
-  const handleEdit = (loan: Loan) => {
-    setLoanMode(loan.emiAmount === 0 ? 'interest-only' : 'normal');
-    setForm({
-      lender: loan.lender,
-      type: loan.type,
-      principalAmount: String(loan.principalAmount),
-      interestRate: String(loan.interestRate),
-      emiAmount: String(loan.emiAmount),
-      startDate: loan.startDate,
-      endDate: loan.endDate || '',
-      outstandingBalance: String(loan.outstandingBalance),
-      status: loan.status,
-    });
-    setEditingId(loan.id);
-    setShowForm(true);
   };
 
   const handleDelete = async (id: string) => {
